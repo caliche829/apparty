@@ -201,7 +201,9 @@ class HomeController extends BaseController {
 
 		$citySchedules = DB::select('select schedules.*
 									from cities, schedules, cities_schedules
-									where cities.name = ?
+									where schedules.id = cities_schedules.schedule_id
+									and cities_schedules.city_id = cities.id
+									and cities.name = ?
 									group by schedules.id, schedules.day, schedules.initial_hour, schedules.final_hour, schedules.previous_day, schedules.day_order
 									order by schedules.day_order asc', array($city));
 		
