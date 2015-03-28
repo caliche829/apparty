@@ -21,7 +21,7 @@ class CityController extends BaseController {
 		// Se obtienen todas las ciudades activas
 		$cities = City::where('active', 1)->get();
 
-		Log::info($cities);
+		//Log::info($cities);
 
 		return Response::json($cities);
 	}

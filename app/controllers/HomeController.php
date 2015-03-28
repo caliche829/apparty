@@ -115,13 +115,18 @@ class HomeController extends BaseController {
 							"img" => 'noAds');
 		
 		$adsArray = null;
+
+		$index = $this->getAdId($city);	
 		
 		if ($city == 'Cali') {
 			
 			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/taxiyaAd.jpg',
-							  'taxiya' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/taxiyaAd.jpg',
+							  'taxiya' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/appartyGuaro.jpg',
 							  'hallowen' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/hallowen.jpg'
 			);
+
+			$index = 'taxiya';
+
 		}elseif ($city == 'Medellin') {
 			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/durex.jpg',
 							  'durex' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/durex.jpg');
@@ -129,8 +134,6 @@ class HomeController extends BaseController {
 		}elseif ($city == 'Palmira') {
 			$adsArray = array('hallowen' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/hallowen.jpg');
 		}
-						
-		$index = $this->getAdId($city);	
 		
 		if ($index != 'noAds') {
 			
@@ -143,7 +146,7 @@ class HomeController extends BaseController {
 		//Check if the city is open at this time
 		$jsonArray['schedule'] = $this->checkCitySchedule($city);
 
-		Log::info($jsonArray);
+		//Log::info($jsonArray);
 	
 		return Response::json($jsonArray);
 	}
