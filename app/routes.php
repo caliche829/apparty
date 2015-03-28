@@ -11,6 +11,13 @@
 |
 */
 
+// Obtiene las ciudades activas
+Route::post('allCities', 'CityController@allCities');
+
+// Obtiene las ciudades activas
+Route::post('getFirstInfo', 'HomeController@getFirstInfo');
+
+
 // Nos indica que las rutas que están dentro de él sólo serán mostradas si antes el usuario se ha autenticado.
 Route::group(array('before' => 'auth'), function()
 {
@@ -33,6 +40,13 @@ Route::group(array('before' => 'auth'), function()
 	////
 	//////////////////////////////////////
 	Route::controller('schedules', 'ScheduleController');
+
+	//////////////////////////////////////
+	////
+	////	CIUDADES
+	////
+	//////////////////////////////////////
+	Route::controller('cities', 'CityController');
 
 	// Confide routes
 	Route::get('users/create', 'UsersController@create');

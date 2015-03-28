@@ -199,6 +199,30 @@ class ScheduleController extends BaseController {
 			// Valido si se crearán horarios
 			if($newSchedDays)
 			{
+				// Se crea arreglo para obtener el dia anterior por ejemplo si el dia es V -> J
+				$previousDay = array(
+					'L' => 'D',
+					'M' => 'L',
+					'X' => 'M',
+					'J' => 'X',
+					'V' => 'J',
+					'S' => 'V',
+					'D' => 'S',
+					'F' => 'D'
+				);
+
+				// Se crea arreglo para guardar el orden de los dias de lunes a viernes
+				$orderDays = array(
+					'L' => '1',
+					'M' => '2',
+					'X' => '3',
+					'J' => '4',
+					'V' => '5',
+					'S' => '6',
+					'D' => '7',
+					'F' => '8'
+				);
+
 				// Recorro los arreglos
 				foreach ($newSchedDays as $key => $newSchedDay) {
 
@@ -230,6 +254,12 @@ class ScheduleController extends BaseController {
 
 						// Establezco el día a partir de la información del arreglo de días
 						$schedule->day = $newSchedDay;
+
+						//Establezco el dia previo
+						$schedule->previous_day = $previousDay[$newSchedDay];
+
+						//Establezco el orden del dia en la semana
+						$schedule->day_order = $orderDays[$newSchedDay];			
 
 						// Establezco la hora inicial a partir de la información del arreglo de horas iniciales
 						$schedule->initial_hour = $newSchedInitHours[$key];

@@ -122,10 +122,10 @@
 													<p>Ahora puede empezar a utilizar el sistema de encuesta para su empresa<br><br>
 														Su clave es: <strong>{{$password}}</strong><br><br>
 
-														Ingresa en: <a href="http://empresaencuestas.herokuapp.com">Sistema encuestas</a>
+														Ingresa en: <a href="http://apparty.colombiapps.com.co">Apparty Admin</a>
 														<br><br>
 														Cordialmente,<br>
-														Encuestas.
+														Apparty.
 													</p>
 												</multiline>
 											</td>
