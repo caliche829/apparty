@@ -292,6 +292,7 @@ class HomeController extends BaseController {
 			}
 		}
 
+		$result['open'] = true;	
 		$result['schedule'] = $finalCityScheds;
 
 		return $result;
