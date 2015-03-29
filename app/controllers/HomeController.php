@@ -175,10 +175,11 @@ class HomeController extends BaseController {
 
 		$actualDay = $daysArray[date('N', strtotime(date('Y-m-d').''))];
 		$timeNow = date('H:i:s');
+		$timeNoon = date('H:i:s', strtotime('12:00:00'));
 		$holidayMonday = false;
 
-		//Si es domingo verifico el lunes festivo
-		if ($actualDay == 'D') {
+		//Si es domingo verifico el lunes festivo solo si abre la app despues del medio dia
+		if ($actualDay == 'D' && $timeNow > $timeNoon) {
 			
 			//Obtengo la fecha del lunes
 			$mondayDate = date('Y-m-d', strtotime('+1 days'));
@@ -194,8 +195,7 @@ class HomeController extends BaseController {
 		}
 
 		//Log::info('timeNow: '.$timeNow);
-
-		$timeNoon = date('H:i:s', strtotime('12:00:00'));
+		
 		$initialTime = null;
 		$finalTime = null;
 
@@ -228,13 +228,16 @@ class HomeController extends BaseController {
 
 						break;
 
-					}else if ($holidayMonday) { //Si el lunes es festivo hay servicio el domingo
-						
-						$result['open'] = true;	
+					}else{
 
-						break;
+						//Si el lunes es festivo hay servicio el domingo en la noche
+						if ($holidayMonday || $timeNow < $timeNoon) { 
+						
+							$result['open'] = true;	
+
+							break;
+						}	
 					}
-					
 				}
 			}
 
@@ -292,7 +295,7 @@ class HomeController extends BaseController {
 			}
 		}
 
-		$result['open'] = true;	
+		//$result['open'] = true;	
 		$result['schedule'] = $finalCityScheds;
 
 		return $result;
