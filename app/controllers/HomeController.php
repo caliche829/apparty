@@ -121,7 +121,7 @@ class HomeController extends BaseController {
 		if ($city == 'Cali') {
 			
 			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/taxiyaAd.jpg',
-							  'taxiya' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/appartyGuaro.jpg',
+							  'taxiya' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/taxiyaAd.jpg',
 							  'hallowen' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/hallowen.jpg'
 			);
 
@@ -177,6 +177,17 @@ class HomeController extends BaseController {
 		$timeNow = date('H:i:s');
 		$timeNoon = date('H:i:s', strtotime('12:00:00'));
 		$holidayMonday = false;
+		
+		$initialTime = null;
+		$finalTime = null;
+
+		$citySchedules = DB::select('select schedules.*
+									from cities, schedules, cities_schedules
+									where schedules.id = cities_schedules.schedule_id
+									and cities_schedules.city_id = cities.id
+									and cities.name = ?
+									group by schedules.id, schedules.day, schedules.initial_hour, schedules.final_hour, schedules.previous_day, schedules.day_order
+									order by schedules.day_order asc', array($city));
 
 		//Si es domingo verifico el lunes festivo solo si abre la app despues del medio dia
 		if ($actualDay == 'D' && $timeNow > $timeNoon) {
@@ -193,21 +204,6 @@ class HomeController extends BaseController {
 				$holidayMonday = true;
 			}
 		}
-
-		//Log::info('timeNow: '.$timeNow);
-		
-		$initialTime = null;
-		$finalTime = null;
-
-		$citySchedules = DB::select('select schedules.*
-									from cities, schedules, cities_schedules
-									where schedules.id = cities_schedules.schedule_id
-									and cities_schedules.city_id = cities.id
-									and cities.name = ?
-									group by schedules.id, schedules.day, schedules.initial_hour, schedules.final_hour, schedules.previous_day, schedules.day_order
-									order by schedules.day_order asc', array($city));
-		
-		//Log::info($citySchedules);
 
 		// Se recorren los horarios
 		foreach ($citySchedules as $key => $schedule) {
