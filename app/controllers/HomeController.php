@@ -128,7 +128,7 @@ class HomeController extends BaseController {
 			$index = 'taxiya';
 
 		}elseif ($city == 'Medellin') {
-			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/durex.jpg',
+			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/banner_tetra.jpg',
 							  'durex' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/durex.jpg');
 			
 		}elseif ($city == 'Palmira') {
