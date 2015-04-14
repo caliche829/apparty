@@ -24,7 +24,7 @@
             <div class="box">
                 <div class="box-content">
                     <div class="text-center">
-                        <h3 class="page-header">El Corte del Sur</h3>
+                        <h3 class="page-header">Apparty</h3>
                     </div>
                     <form method="POST" action="{{{ URL::to('/users/reset_password') }}}" accept-charset="UTF-8">
                         <input type="hidden" name="token" value="{{{ $token }}}">

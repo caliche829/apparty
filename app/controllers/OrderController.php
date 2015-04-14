@@ -29,30 +29,32 @@ class OrderController extends BaseController {
 		$orders = Order::where('order_date', 'like', $year.'-'.$month.'%')->
 						   where('city', '=', $city->name)->with('customer')->with('status')->orderBy('order_date', 'asc')->get();
 
-		$money = DB::select('select status_id, status.name, sum(price) as price
+		$money = DB::select('select status_id, status.name, sum(price) as total
 							from orders_old, status
 							where order_date like ?
 							and city = ?
 							and status_id = status.id
 							group by status_id', array($year.'-'.$month.'%', $city->name));
 
+		//Log::info($money);
+
 		$total = 0;
 		$priceSuccess = 0;
 		$priceFail = 0;
 		$pricePending = 0;
 
-		//Recorro los trabajadores
+		//Recorro los valores del mes
 		foreach ($money as $key => $value) {
 			
-			$total += $value->price;
+			$total += $value->total;
 
 			if ($value->name == 'Entregado') {
-				$priceSuccess += $value->price;
+				$priceSuccess += $value->total;
 
 			}elseif ($value->name == 'Pendiente') {
-				$pricePending += $value->price;
+				$pricePending += $value->total;
 			}else{
-				$priceFail += $value->price;
+				$priceFail += $value->total;
 			}
 		}
 
@@ -69,8 +71,10 @@ class OrderController extends BaseController {
 	*/
 	public function getShowOrder($id)
 	{			
-		$order = Order::find($id)->with('customer');
+		$order = Order::where('id', $id)->with('customer')->with('status')->first();
 		
+		Log::info($order);
+
 		// Retorna el pedido
 		return View::make('order.showorder')->with(array('order'=> $order));
 	}
