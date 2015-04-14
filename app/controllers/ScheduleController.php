@@ -82,7 +82,7 @@ class ScheduleController extends BaseController {
 		);
 
 		// Se obtienen los horarios de la ciudad
-		$citySchedules = $selectedCity->schedules;
+		$citySchedules = City::find($id)->schedules()->orderBy('day_order', 'asc')->get();
 
 		// Retorna los arreglos
 		return View::make('schedules.edit') -> with(array(
@@ -161,10 +161,22 @@ class ScheduleController extends BaseController {
 						continue;
 					}
 
-					// Establezco el horario para crear en los arreglos de horarios nuevos
-					$newSchedDays[] = $modSchedDays[$key];
-					$newSchedInitHours[] = $modSchedInitHours[$key];
-					$newSchedFinalHours[] = $modSchedFinalHours[$key];
+					// Obtengo alguna ciudad que este usando este horario
+					$anotherCity = $schedule->cities()->whereNotIn(
+															'id', array($cityId)
+														)->first();
+
+					// Valido si hay otra ciudad usando ese horario
+					if ($anotherCity)
+					{							
+						// Establezco el horario para crear en los arreglos de horarios nuevos
+						$newSchedDays[] = $modSchedDays[$key];
+						$newSchedInitHours[] = $modSchedInitHours[$key];
+						$newSchedFinalHours[] = $modSchedFinalHours[$key];
+
+						// Se omite la modificación del horario
+						continue;
+					}
 					
 					// Guardo el horario en el arreglo de horarios de la ciudad
 					$citySchedArray[$schedule->id] = $schedule->id;

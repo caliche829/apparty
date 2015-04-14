@@ -87,6 +87,27 @@ function LoadAjaxContent(url){
 	});
 }
 //
+//Function for load content from url with data and put it on passed div
+//
+function LoadAjaxContentPost(data, div, url){
+	$('.preloader').show();
+	$.ajax({
+		mimeType: 'text/html; charset=utf-8', // ! Need set mimeType only when run from local file
+		url: url,
+		data: data,
+		type: 'POST',
+		success: function(data) {
+			$('#'+div).html(data);
+			$('.preloader').hide();
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert(errorThrown);
+		},
+		dataType: "html",
+		async: false
+	});
+}
+//
 //  Function maked all .box selector is draggable, to disable for concrete element add class .no-drop
 //
 function WinMove(){
@@ -723,4 +744,15 @@ $(document).ready(function () {
 	});
 });
 
-
+/**
+ * Adds new years to the list after 2014 (only when necesary)
+ */
+function completeYearList(list){
+	var today = new Date();
+	var yyyy = today.getFullYear();
+	
+	for ( var i = 2013; i < yyyy; i++) {
+		
+		$('#'+list).append('<option value="'+(i+1)+'">'+(i+1)+'</option>');
+	}
+}

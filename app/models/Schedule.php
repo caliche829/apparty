@@ -18,6 +18,6 @@ class Schedule extends Eloquent {
 	// Método que define la relación muchos a muchos con ciudades
 	public function cities()
     {
-        return $this->belongsToMany('City', 'cities_schedule', 'schedule_id', 'city_id');
+        return $this->belongsToMany('City', 'cities_schedules', 'schedule_id', 'city_id');
     }
 }

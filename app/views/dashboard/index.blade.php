@@ -107,6 +107,17 @@
 							@endif
 						</ul>
 					</li>		
+				@endif
+				@if (Authority::can('read', 'Order'))
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-briefcase"></i>
+							<span class="hidden-xs">Pedidos</span>
+						</a>
+						<ul class="dropdown-menu">						
+							<li><a class="ajax-link" href="orders/orders-form">Pedidos por Ciudad</a></li>
+						</ul>
+					</li>		
 				@endif					
 			</ul>
 		</div>

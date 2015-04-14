@@ -48,6 +48,13 @@ Route::group(array('before' => 'auth'), function()
 	//////////////////////////////////////
 	Route::controller('cities', 'CityController');
 
+	//////////////////////////////////////
+	////
+	////	PEDIDOS
+	////
+	//////////////////////////////////////
+	Route::controller('orders', 'OrderController');
+
 	// Confide routes
 	Route::get('users/create', 'UsersController@create');
 	Route::post('users', 'UsersController@store');
