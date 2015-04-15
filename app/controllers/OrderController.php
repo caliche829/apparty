@@ -36,7 +36,7 @@ class OrderController extends BaseController {
 							and status_id = status.id
 							group by status_id', array($year.'-'.$month.'%', $city->name));
 
-		//Log::info($money);
+		//Log::info($orders);
 
 		$total = 0;
 		$priceSuccess = 0;
@@ -73,10 +73,40 @@ class OrderController extends BaseController {
 	{			
 		$order = Order::where('id', $id)->with('customer')->with('status')->first();
 		
-		Log::info($order);
+		//Log::info($order);
 
 		// Retorna el pedido
 		return View::make('order.showorder')->with(array('order'=> $order));
 	}
 
+	/**
+	* Muestra el view para obtener todos los pedidos pendientes
+	*/
+	public function getOrdersPendingForm()
+	{			
+		// Se obtienen todas las ciudades activas
+		$cities = City::lists('name','id');
+
+		//Log::info($cities);
+
+		// Retorna las ciudades 
+		return View::make('order.orderspendingform') -> with(array('cities'=> $cities));
+	}
+
+	/**
+	* Obtiene los pedidos de una ciudad por mes
+	*/
+	public function postOrdersPending()
+	{			
+		$cityId = Input::get('city');
+
+		//Obtengo la ciudad
+		$city = City::find($cityId);
+
+		//Consulta los pedidos
+		$orders = Order::where('city', '=', $city->name)->with('customer')->with('status')->orderBy('order_date', 'asc')->get();
+
+		// Retorna los pedidos 
+		return View::make('order.pendingorders')->with(array('orders'=> $orders));
+	}
 }

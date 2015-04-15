@@ -97,7 +97,7 @@
 				@if (Authority::can('read', 'Schedule'))
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
-							<i class="fa fa-briefcase"></i>
+							<i class="fa fa-clock-o"></i>
 							<span class="hidden-xs">Horarios</span>
 						</a>
 						<ul class="dropdown-menu">						
@@ -111,11 +111,12 @@
 				@if (Authority::can('read', 'Order'))
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
-							<i class="fa fa-briefcase"></i>
+							<i class="fa fa-book"></i>
 							<span class="hidden-xs">Pedidos</span>
 						</a>
 						<ul class="dropdown-menu">						
 							<li><a class="ajax-link" href="orders/orders-form">Pedidos por Ciudad</a></li>
+							<li><a class="ajax-link" href="orders/orders-pending-form">Pedidos pendientes</a></li>
 						</ul>
 					</li>		
 				@endif					

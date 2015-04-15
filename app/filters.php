@@ -93,3 +93,13 @@ Route::filter('allowOrigin', function($route, $request, $response)
 {
 	$response->header('access-control-allow-origin','*');
 });
+
+/**
+* Disable caching on browser
+*/
+Route::filter('after', function($response)
+{
+	// No caching for pages
+	$response->header("Pragma", "no-cache");
+	$response->header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+});
