@@ -121,14 +121,14 @@ class HomeController extends BaseController {
 		if ($city == 'Cali') {
 			
 			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/taxiyaAd.jpg',
-							  'taxiya' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/taxiyaAd.jpg',
+							  'taxiya' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/leyseca.jpg',
 							  'hallowen' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/hallowen.jpg'
 			);
 
 			$index = 'taxiya';
 
 		}elseif ($city == 'Medellin') {
-			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/banner_tetra.jpg',
+			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/leyseca.jpg',
 							  'durex' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/durex.jpg');
 			
 		}elseif ($city == 'Palmira') {
