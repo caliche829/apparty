@@ -149,16 +149,25 @@ class ScheduleController extends BaseController {
 															'day', $modSchedDays[$key]
 														)->first();
 
+					Log::info('schedId '. $modSchedId);
+					Log::info('initial_hour '. $modSchedInitHours[$key]);
+					Log::info('final_hour '. $modSchedFinalHours[$key]);
+					Log::info('day '. $modSchedDays[$key]);
+					Log::info($scheduleWithoutChanges);
+
 					// Valido si no se hicieron cambios en el horario
 					if ($scheduleWithoutChanges)
 					{
-						//Log::info('No hubo cambios en el horario: '.$scheduleWithoutChanges->id);
+						if ($scheduleWithoutChanges->id == $modSchedId) {
+							
+							Log::info('No hubo cambios en el horario: '.$scheduleWithoutChanges->id);
 
-						// Guardo el horario en el arreglo de horarios de la ciudad
-						$citySchedArray[$schedule->id] = $schedule->id;
+							// Guardo el horario en el arreglo de horarios de la ciudad
+							$citySchedArray[$schedule->id] = $schedule->id;
 
-						// Se omite la modificación del horario
-						continue;
+							// Se omite la modificación del horario
+							continue;
+						}
 					}
 
 					// Obtengo alguna ciudad que este usando este horario
