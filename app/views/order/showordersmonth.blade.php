@@ -33,7 +33,7 @@
 									{{ 												
 									 	HTML::link('#', 
 									 	'Ver detalle', 
-									 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("orders/show-order/'.$order->id.'"); return false;'), 
+									 	$attributes = array('class'=>'ajax-link', 'onclick' => 'detailModal("orders/show-order/'.$order->id.'"); return false;'), 
 									 	$secure = null); 
 									 }}
 								</td>
@@ -60,5 +60,18 @@
 		TestTable1();
 		//MakeSelect2();
 	});
+
+	function detailModal(url){
+
+		OpenModalBox('Detalle del pedido', 'Cargando... <img src="img/devoops_getdata.gif"/>', '');
+
+		//$("#orderDetail").modal();
+
+		setTimeout(function(){
+
+			LoadAjaxContent(url, '.devoops-modal-inner');
+
+		}, 500);
+	}
 
 </script>

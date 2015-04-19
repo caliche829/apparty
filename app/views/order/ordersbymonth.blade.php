@@ -78,6 +78,6 @@ function getCityOrdersByMonth(){
 	var month = $('#select-month').val();
 	var year = $('#select-year').val();
 	
-	LoadAjaxContentPost({city: city, month: month, year: year}, 'orders-div', 'orders/orders-month');
+	LoadAjaxContentPost({city: city, month: month, year: year}, '#orders-div', 'orders/orders-month');
 }
 </script>

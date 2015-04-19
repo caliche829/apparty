@@ -67,17 +67,26 @@ function SaveContent(inFormId){
 	Main scripts used by theme
 ---------------------------------------------*/
 //
-//  Function for load content from url and put in $('.ajax-content') block
+//  Function for load content from url and put it on div/class default load data on ajax-content div
 //
-function LoadAjaxContent(url){
-	$('.preloader').show();
+function LoadAjaxContent(url, div){
+	
+	if (div == null || div == undefined) {
+		$('.preloader').show();
+	}
+	
 	$.ajax({
 		mimeType: 'text/html; charset=utf-8', // ! Need set mimeType only when run from local file
 		url: url,
 		type: 'GET',
 		success: function(data) {
-			$('#ajax-content').html(data);
-			$('.preloader').hide();
+
+			if (div == null || div == undefined) {
+				$('#ajax-content').html(data);	
+				$('.preloader').hide();
+			}else{
+				$(div).html(data);
+			}
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert(errorThrown);
@@ -87,18 +96,26 @@ function LoadAjaxContent(url){
 	});
 }
 //
-//Function for load content from url with data and put it on passed div
+//Function for load content from url with data and put it on passed div method POST
 //
 function LoadAjaxContentPost(data, div, url){
-	$('.preloader').show();
+	
+	if (div == null || div == undefined) {
+		$('.preloader').show();
+	}
+	
 	$.ajax({
 		mimeType: 'text/html; charset=utf-8', // ! Need set mimeType only when run from local file
 		url: url,
 		data: data,
 		type: 'POST',
 		success: function(data) {
-			$('#'+div).html(data);
-			$('.preloader').hide();
+			if (div == null || div == undefined) {
+				$('#ajax-content').html(data);	
+				$('.preloader').hide();
+			}else{
+				$(div).html(data);
+			}
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert(errorThrown);

@@ -28,7 +28,7 @@
 									{{ 												
 									 	HTML::link('#', 
 									 	'Ver detalle', 
-									 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("orders/show-order/'.$order->id.'"); return false;'), 
+									 	$attributes = array('class'=>'ajax-link', 'onclick' => 'detailModal("orders/show-order/'.$order->id.'"); return false;'), 
 									 	$secure = null); 
 									 }}
 								</td>
@@ -48,6 +48,7 @@
 		<p class="bg-danger">{{$msg}}</p>
 	@endif
 </div>
+
 <script type="text/javascript">
 	
 	// Se ejecutan los plug-in de la tabla de datos y los combos
@@ -55,5 +56,18 @@
 		TestTable1();
 		//MakeSelect2();
 	});
+
+	function detailModal(url){
+
+		OpenModalBox('Detalle del pedido', 'Cargando... <img src="img/devoops_getdata.gif"/>', '');
+
+		//$("#orderDetail").modal();
+
+		setTimeout(function(){
+
+			LoadAjaxContent(url, '.devoops-modal-inner');
+
+		}, 500);
+	}
 
 </script>

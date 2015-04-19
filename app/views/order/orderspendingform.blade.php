@@ -43,7 +43,7 @@
 </div>
 <script type="text/javascript">
 /**
- * Get the city orders by month
+ * Get the pending orders
  */
 function getPendingOrders(){
 	
