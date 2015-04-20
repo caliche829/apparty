@@ -49,6 +49,6 @@ function getPendingOrders(){
 	
 	var city = $('#city').val();
 	
-	LoadAjaxContentPost({city: city}, 'orders-div', 'orders/orders-pending');
+	LoadAjaxContentPost({city: city}, '#orders-div', 'orders/orders-pending');
 }
 </script>
