@@ -111,7 +111,7 @@ class HomeController extends BaseController {
 		$city = Input::get('city');
 
 		$jsonArray = array( "success" => true,
-							"showTime" => 5000,
+							"showTime" => 4000,
 							"img" => 'noAds');
 		
 		$adsArray = null;
