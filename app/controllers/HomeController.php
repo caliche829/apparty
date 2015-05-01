@@ -111,7 +111,7 @@ class HomeController extends BaseController {
 		$city = Input::get('city');
 
 		$jsonArray = array( "success" => true,
-							"showTime" => 6000,
+							"showTime" => 5000,
 							"img" => 'noAds');
 		
 		$adsArray = null;
@@ -120,19 +120,19 @@ class HomeController extends BaseController {
 		
 		if ($city == 'Cali') {
 			
-			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/taxiyaAd.jpg',
-							  'taxiya' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/24_cervezas_poker.jpg',
-							  'hallowen' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/hallowen.jpg'
+			$adsArray = array('sexboutique' => 'https://s3.amazonaws.com/apparty/ads/taxiyaAd.jpg',
+							  'taxiya' => 'https://s3.amazonaws.com/apparty/ads/taxiyaAd.jpg',
+							  'hallowen' => 'https://s3.amazonaws.com/apparty/ads/hallowen.jpg'
 			);
 
 			$index = 'taxiya';
 
 		}elseif ($city == 'Medellin') {
-			$adsArray = array('sexboutique' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/durex.jpg',
-							  'durex' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/durex.jpg');
+			$adsArray = array('sexboutique' => 'https://s3.amazonaws.com/apparty/ads/24_cervezas_pilsen.jpg',
+							  'durex' => 'https://s3.amazonaws.com/apparty/ads/durex.jpg');
 			
 		}elseif ($city == 'Palmira') {
-			$adsArray = array('hallowen' => 'http://taxiya.elasticbeanstalk.com/apparty/ads/hallowen.jpg');
+			$adsArray = array('hallowen' => 'https://s3.amazonaws.com/apparty/ads/hallowen.jpg');
 		}
 		
 		if ($index != 'noAds') {
