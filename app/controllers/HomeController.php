@@ -111,7 +111,7 @@ class HomeController extends BaseController {
 		$city = Input::get('city');
 
 		$jsonArray = array( "success" => true,
-							"showTime" => 4000,
+							"showTime" => 5000,
 							"img" => 'noAds');
 		
 		$adsArray = null;
@@ -121,7 +121,7 @@ class HomeController extends BaseController {
 		if ($city == 'Cali') {
 			
 			$adsArray = array('sexboutique' => 'https://s3.amazonaws.com/apparty/ads/taxiyaAd.jpg',
-							  'taxiya' => 'https://s3.amazonaws.com/apparty/ads/taxiyaAd.jpg',
+							  'taxiya' => 'https://s3.amazonaws.com/apparty/ads/banner_comidas.jpg',
 							  'hallowen' => 'https://s3.amazonaws.com/apparty/ads/hallowen.jpg'
 			);
 
