@@ -121,14 +121,14 @@ class HomeController extends BaseController {
 		if ($city == 'Cali') {
 			
 			$adsArray = array('sexboutique' => 'https://s3.amazonaws.com/apparty/ads/taxiyaAd.jpg',
-							  'taxiya' => 'https://s3.amazonaws.com/apparty/ads/banner_comidas.jpg',
+							  'taxiya' => 'https://s3.amazonaws.com/apparty/ads/24_cervezas_poker.jpg',
 							  'hallowen' => 'https://s3.amazonaws.com/apparty/ads/hallowen.jpg'
 			);
 
 			$index = 'taxiya';
 
 		}elseif ($city == 'Medellin') {
-			$adsArray = array('sexboutique' => 'https://s3.amazonaws.com/apparty/ads/durex.jpg',
+			$adsArray = array('sexboutique' => 'https://s3.amazonaws.com/apparty/ads/24_cervezas_pilsen.jpg',
 							  'durex' => 'https://s3.amazonaws.com/apparty/ads/durex.jpg');
 			
 		}elseif ($city == 'Palmira') {
