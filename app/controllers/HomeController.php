@@ -218,7 +218,7 @@ class HomeController extends BaseController {
 				if ($initialTime <= $timeNow && $timeNow <= $finalTime) {
 
 					//Verifica que no sea dia Domingo
-					if ($actualDay != 'D' && $city == 'Cali') {
+					if ($actualDay != 'D') {
 
 						$result['open'] = true;	
 
@@ -227,7 +227,7 @@ class HomeController extends BaseController {
 					}else{
 
 						//Si el lunes es festivo hay servicio el domingo en la noche
-						if ($holidayMonday || $timeNow < $timeNoon && $city == 'Cali') { 
+						if ($holidayMonday || $timeNow < $timeNoon) { 
 						
 							$result['open'] = true;	
 
