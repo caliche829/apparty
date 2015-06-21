@@ -148,13 +148,13 @@ class ScheduleController extends BaseController {
 														)->where(
 															'day', $modSchedDays[$key]
 														)->first();
-
+/*
 					Log::info('schedId '. $modSchedId);
 					Log::info('initial_hour '. $modSchedInitHours[$key]);
 					Log::info('final_hour '. $modSchedFinalHours[$key]);
 					Log::info('day '. $modSchedDays[$key]);
 					Log::info($scheduleWithoutChanges);
-
+*/
 					// Valido si no se hicieron cambios en el horario
 					if ($scheduleWithoutChanges)
 					{

@@ -14,7 +14,7 @@
 // Obtiene las ciudades activas
 Route::post('allCities', 'CityController@allCities');
 
-// Obtiene las ciudades activas
+// Obtiene la informacion inicial del app
 Route::post('getFirstInfo', 'HomeController@getFirstInfo');
 
 

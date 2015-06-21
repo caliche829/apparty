@@ -248,10 +248,15 @@ class HomeController extends BaseController {
 				$dateToShow = date('g:i a',strtotime($schedule->final_hour));
 
 				$arrayIndex = $schedule->previous_day;
+
+				Log::info('Previous arrayIndex: '.$arrayIndex.' / '.$dateToShow);
+
 			}else{
 				$arrayIndex = $schedule->day;
 
 				$dateToShow = date('g:i a',strtotime($schedule->initial_hour));
+
+				Log::info('Actual arrayIndex: '.$arrayIndex.' / '.$dateToShow);
 			}
 			
 			// Se valida si ya existe un horario definido para el mismo día				
@@ -261,10 +266,23 @@ class HomeController extends BaseController {
 				$separator = ' a ';
 			}
 
+			//Verifico si el separador ' a ' ya esta en el horario
 			if (strpos($citySchedulesArray[$arrayIndex], ' a ') === false) {
 				
-				// Agrega el horario al arreglo según el día 
-				$citySchedulesArray[$arrayIndex] = $citySchedulesArray[$arrayIndex].$separator.$dateToShow;
+				//Si es domingo se debe armar diferente
+				if ($arrayIndex == 'D') {
+					
+					// Agrega el horario al arreglo según el día 
+					$citySchedulesArray[$arrayIndex] = $dateToShow.$separator.$citySchedulesArray[$arrayIndex];
+
+				}else{
+
+					// Agrega el horario al arreglo según el día 
+					$citySchedulesArray[$arrayIndex] = $citySchedulesArray[$arrayIndex].$separator.$dateToShow;
+
+				}
+				
+				Log::info($citySchedulesArray[$arrayIndex]);
 			}
 			
 		}
