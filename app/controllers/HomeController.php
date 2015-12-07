@@ -287,7 +287,7 @@ class HomeController extends BaseController {
 
 				}
 				
-				Log::info($citySchedulesArray[$arrayIndex]);
+				//Log::info($citySchedulesArray[$arrayIndex]);
 			}
 			
 		}
@@ -313,7 +313,7 @@ class HomeController extends BaseController {
 				$finalCityScheds[$schedule->day] .= $citySchedulesArray[$schedule->day];
 
 				if ($schedule->day == 'D') {
-					$finalCityScheds[$schedule->day] .= '<br>DURANTE DICIEMBRE TAMBIEN ATENDEREMOS LOS DOMINGOS';
+					$finalCityScheds[$schedule->day] .= '<br><br>DURANTE DICIEMBRE TAMBIEN ATENDEREMOS LOS DOMINGOS';
 				}
 			}
 		}
