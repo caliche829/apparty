@@ -195,7 +195,7 @@ class HomeController extends BaseController {
 									order by schedules.day_order asc', array($city));
 
 		//Si es domingo verifico el lunes festivo solo si abre la app despues del medio dia
-		if ($actualDay == 'D' && $timeNow > $timeNoon) {
+		/*if ($actualDay == 'D' && $timeNow > $timeNoon) {
 			
 			//Obtengo la fecha del lunes
 			$mondayDate = date('Y-m-d', strtotime('+1 days'));
@@ -208,7 +208,7 @@ class HomeController extends BaseController {
 				
 				$holidayMonday = true;
 			}
-		}
+		}*/
 
 		// Se recorren los horarios
 		foreach ($citySchedules as $key => $schedule) {
@@ -223,13 +223,13 @@ class HomeController extends BaseController {
 				if ($initialTime <= $timeNow && $timeNow <= $finalTime) {
 
 					//Verifica que no sea dia Domingo
-					if ($actualDay != 'D') {
+					//if ($actualDay != 'D') {
 
 						$result['open'] = true;	
 
 						break;
 
-					}else{
+					/*}else{
 
 						//Si el lunes es festivo hay servicio el domingo en la noche
 						if ($holidayMonday || $timeNow < $timeNoon) { 
@@ -238,7 +238,7 @@ class HomeController extends BaseController {
 
 							break;
 						}	
-					}
+					}*/
 				}
 			}
 
@@ -254,14 +254,14 @@ class HomeController extends BaseController {
 
 				$arrayIndex = $schedule->previous_day;
 
-				Log::info('Previous arrayIndex: '.$arrayIndex.' / '.$dateToShow);
+				//Log::info('Previous arrayIndex: '.$arrayIndex.' / '.$dateToShow);
 
 			}else{
 				$arrayIndex = $schedule->day;
 
 				$dateToShow = date('g:i a',strtotime($schedule->initial_hour));
 
-				Log::info('Actual arrayIndex: '.$arrayIndex.' / '.$dateToShow);
+				//Log::info('Actual arrayIndex: '.$arrayIndex.' / '.$dateToShow);
 			}
 			
 			// Se valida si ya existe un horario definido para el mismo día				
@@ -311,6 +311,10 @@ class HomeController extends BaseController {
 
 				// Agrega el horario al arreglo según el día 
 				$finalCityScheds[$schedule->day] .= $citySchedulesArray[$schedule->day];
+
+				if ($schedule->day == 'D') {
+					$finalCityScheds[$schedule->day] .= '<br>DURANTE DICIEMBRE TAMBIEN ATENDEREMOS LOS DOMINGOS';
+				}
 			}
 		}
 
