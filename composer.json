@@ -6,7 +6,8 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"zizaco/confide": "~4.3@dev",
-		"efficiently/authority-controller": "1.2.*"
+		"efficiently/authority-controller": "1.2.*",
+		"aws/aws-sdk-php-laravel": "1.*"
 	},
 	"autoload": {
 		"classmap": [

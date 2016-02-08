@@ -90,6 +90,25 @@
 	<div class="row">
 		<div id="sidebar-left" class="col-xs-2 col-sm-2">
 			<ul class="nav main-menu">
+				@if (Confide::user()->hasRole('Administrador'))
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-indent"></i>
+							<span class="hidden-xs">Productos</span>
+						</a>
+						<ul class="dropdown-menu">						
+							<li>
+								<a class="ajax-link" href="producttypes/all">Categorias General</a>
+							</li>
+							<li>
+								<a class="ajax-link" href="producttypes/cities">Categorias x Ciudad</a>
+							</li>	
+							<li>
+								<a class="ajax-link" href="products/all">Artículos</a>
+							</li>						
+						</ul>
+					</li>
+				@endif
 				@if (Authority::can('read', 'Schedule'))
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">

@@ -311,10 +311,10 @@ class HomeController extends BaseController {
 
 				// Agrega el horario al arreglo según el día 
 				$finalCityScheds[$schedule->day] .= $citySchedulesArray[$schedule->day];
-
+/*
 				if ($schedule->day == 'D') {
 					$finalCityScheds[$schedule->day] .= '<br><br>DURANTE DICIEMBRE TAMBIEN ATENDEREMOS LOS DOMINGOS';
-				}
+				}*/
 			}
 		}
 

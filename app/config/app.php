@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Zizaco\Confide\ServiceProvider',
 		'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
+		'Aws\Laravel\AwsServiceProvider',
 
 	),
 
@@ -193,6 +194,7 @@ return array(
 		'Confide'    	  => 'Zizaco\Confide\Facade',
 		'Params'   		  => 'Efficiently\AuthorityController\Facades\Params',
    		'Authority' 	  => 'Efficiently\AuthorityController\Facades\Authority',
+   		'AWS' 			  => 'Aws\Laravel\AwsFacade',
 
 	),
 

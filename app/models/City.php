@@ -17,4 +17,10 @@ class City extends Eloquent {
     {
         return $this->belongsToMany('Schedule', 'cities_schedules', 'city_id', 'schedule_id');
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany('ProductType', 'prodtypes_cities', 'city_id', 'prodtypes_id')
+        			->withPivot('img_url');
+    }
 }
