@@ -160,7 +160,7 @@ class ScheduleController extends BaseController {
 					{
 						if ($scheduleWithoutChanges->id == $modSchedId) {
 							
-							Log::info('No hubo cambios en el horario: '.$scheduleWithoutChanges->id);
+							//Log::info('No hubo cambios en el horario: '.$scheduleWithoutChanges->id);
 
 							// Guardo el horario en el arreglo de horarios de la ciudad
 							$citySchedArray[$schedule->id] = $schedule->id;
