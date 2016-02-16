@@ -90,7 +90,7 @@
 	<div class="row">
 		<div id="sidebar-left" class="col-xs-2 col-sm-2">
 			<ul class="nav main-menu">
-				@if (Confide::user()->hasRole('Administradorrrr'))
+				@if (Confide::user()->hasRole('Administradorrrrrr'))
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-indent"></i>

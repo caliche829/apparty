@@ -138,6 +138,11 @@ class HomeController extends BaseController {
 			$adsArray = array('panama' => 'https://s3.amazonaws.com/apparty/ads/promo.jpg');
 			
 			$index = 'panama';
+
+		}elseif ($city == 'Bogota') {
+			$adsArray = array('bogota' => 'https://s3.amazonaws.com/apparty/ads/appartyBogota.jpg');
+			
+			$index = 'bogota';
 		}
 		
 		if ($index != 'noAds') {
