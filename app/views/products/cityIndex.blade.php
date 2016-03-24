@@ -2,7 +2,7 @@
 	<div id="breadcrumb" class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a href="/">Inicio</a></li>
-			<li><a href="#">Categorías</a></li>			
+			<li><a href="#">Articulos</a></li>			
 		</ol>
 	</div>
 </div>
@@ -12,7 +12,7 @@
 			<div class="box-header">
 				<div class="box-name">
 					<h3>					
-						<span>Categorías x Ciudad</span>
+						<span>Articulos x Ciudad</span>
 					</h3>
 				</div>
 				<div class="box-icons">
@@ -41,8 +41,8 @@
 
 				@if($city != false)
 					<div id='registerCatBtn'>
-						@if (Authority::can('create', 'ProductType'))
-							<a class='btn btn-primary' href='#' onclick="LoadAjaxContent('producttypesbycity/form/'.$city->id.'/-1/-1')">Crear categoría x ciudad</a>
+						@if (Authority::can('create', 'Product'))
+							<a class='btn btn-primary' href='#' onclick="LoadAjaxContent('productsbycity/form/'.$city->id.'/-1')">Crear articulo x ciudad</a>
 						@endif
 					</div>
 				@else
@@ -54,29 +54,35 @@
 						<table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 							<thead>
 								<tr>
-									<th>Foto</th>										
-									<th>Categoría</th>	
+									<th>Articulo</th>
+									<th>Descripción</th>										
+									<th>Precio</th>	
+									<th>Cantidad</th>	
 									<th>Activo</th>							
 								</tr>
 							</thead>
 							<tbody>							
-								@foreach($city->categories as $category)
+								@foreach($city->products as $product)
 									<tr>
-										<td>
-											@if ($category->img_url)
-												<img src="{{ $category->img_url }}" class="center" style="width: 60px; height: auto;">
-											@endif
-										</td>
 										<td>
 											{{ 												
 											 	HTML::link('#', 
-											 	$category->description, 
-											 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("producttypesbycity/edit-form/'.$category->id.'/-1/'.$city->id.'"); return false;'), 
+											 	$product->name, 
+											 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("productsbycity/edit-form/'.$product->id.'/'.$city->id.'"); return false;'), 
 											 	$secure = null); 
 											 }}
 										</td>
 										<td>
-											@if($category->active == '1')
+											{{ $product->description }}
+										</td>
+										<td>
+											${{ $product->price }}
+										</td>
+										<td>
+											{{ $product->quantity }}
+										</td>
+										<td>
+											@if($product->active == '1')
 												Sí
 											@else
 												No
@@ -84,7 +90,7 @@
 										</td>						
 									</tr>
 								@endforeach
-							</tbody>					
+							</tbody>			
 						</table>
 					@endif
 				</div>				
@@ -105,8 +111,8 @@
 	    	var cityId = $('#city').val();		
 
 	    	data = "<div id='registerCatBtn'>"+
-				"@if (Authority::can('create', 'ProductType'))\n" +
-					"<a class='btn btn-primary' href='#' onclick=\"LoadAjaxContent('producttypesbycity/form/"+cityId+"/-1/-1')\">Crear categoría x ciudad</a>"+
+				"@if (Authority::can('create', 'Product'))\n" +
+					"<a class='btn btn-primary' href='#' onclick=\"LoadAjaxContent('productsbycity/form/"+cityId+"/-1')\">Crear articulo x ciudad</a>"+
 				"@endif \n </div>";
 
 			if(!cityId){
@@ -114,7 +120,7 @@
 				data = "<div id='registerCatBtn'><br></div>";
 			}
 
-			LoadAjaxContent('producttypesbycity/city-all/'+cityId, '#cityCategories');
+			LoadAjaxContent('productsbycity/city-all/'+cityId, '#cityCategories');
 			$(div).html(data);
 	    });
 	});

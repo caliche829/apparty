@@ -2,7 +2,7 @@
 	<div id="breadcrumb" class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a href="/">Inicio</a></li>
-			<li><a href="#">Categorías</a></li>			
+			<li><a href="#">Imágenes</a></li>			
 		</ol>
 	</div>
 </div>
@@ -12,7 +12,7 @@
 			<div class="box-header">
 				<div class="box-name">
 					<h3>					
-						<span>Categorías</span>
+						<span>Imágenes</span>
 					</h3>
 				</div>
 				<div class="box-icons">
@@ -25,36 +25,36 @@
 				<div class="no-move"></div>
 			</div>
 			<div class="box-content">
-
-				@if (Authority::can('create', 'ProductType'))
-					<a class="btn btn-primary" href="#" onclick="LoadAjaxContent('producttypes/form')">Crear categoría</a>
-				@endif
-
 				<div style="padding: 10px 0; border-top: 2px solid grey;">
 					<table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 						<thead>
-							<tr>										
-								<th>Categoría</th>
+							<tr>
+								<th>Foto</th>										
+								<th>Descripción</th>				
 							</tr>
 						</thead>
 						<tbody>
 						<!-- Start: list_row -->
-							@if ($categories)
-								@foreach($categories as $category)
+							@if ($images)
+								@foreach($images as $image)
 									<tr>
+										<td>
+											<img src="{{ $image->img_url }}" class="center" style="width: 60px; height: auto;">
+										</td>
 										<td>
 											{{ 												
 											 	HTML::link('#', 
-											 	$category->description, 
-											 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("producttypes/edit-form/'.$category->id.'"); return false;'), 
+											 	$image->description, 
+											 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("images/edit-form/'.$image->id.'"); return false;'), 
 											 	$secure = null); 
 											 }}
-										</td>										
+										</td>						
 									</tr>
 								@endforeach
 							@else
 								<tr>
 									<td>-</td>
+									<td>-</td>								
 								</tr>							
 							@endif
 

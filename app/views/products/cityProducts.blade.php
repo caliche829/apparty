@@ -1,31 +1,36 @@
 <table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 	<thead>
 		<tr>
-			<th>Foto</th>										
-			<th>Categoría</th>	
+			<th>Articulo</th>
+			<th>Descripción</th>										
+			<th>Precio</th>	
+			<th>Cantidad</th>	
 			<th>Activo</th>							
 		</tr>
 	</thead>
 	<tbody>
-	<!-- Start: list_row -->
-		@if ($city)
-			@foreach($city->categories as $category)
+		@if ($city)				
+			@foreach($city->products as $product)
 				<tr>
-					<td>
-						@if ($category->img_url)
-							<img src="{{ $category->img_url }}" class="center" style="width: 60px; height: auto;">
-						@endif						
-					</td>
 					<td>
 						{{ 												
 						 	HTML::link('#', 
-						 	$category->description, 
-						 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("producttypesbycity/edit-form/'.$category->id.'/-1/'.$city->id.'"); return false;'), 
+						 	$product->name, 
+						 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("productsbycity/edit-form/'.$product->id.'/'.$city->id.'"); return false;'), 
 						 	$secure = null); 
 						 }}
 					</td>
 					<td>
-						@if($category->active == '1')
+						{{ $product->description }}
+					</td>
+					<td>
+						${{ $product->price }}
+					</td>
+					<td>
+						{{ $product->quantity }}
+					</td>
+					<td>
+						@if($product->active == '1')
 							Sí
 						@else
 							No
@@ -37,10 +42,12 @@
 			<tr>
 				<td>-</td>
 				<td>-</td>	
-				<td>-</td>								
+				<td>-</td>	
+				<td>-</td>		
+				<td>-</td>									
 			</tr>							
 		@endif
-	</tbody>					
+	</tbody>				
 </table>
 <script type="text/javascript">
 	// Se ejecutan los plug-in de la tabla de datos y los combos

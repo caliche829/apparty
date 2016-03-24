@@ -19,7 +19,7 @@
 		
 		{{ HTML::script('plugins/jquery/jquery-2.1.0.min.js') }}
 		{{ HTML::script('plugins/jquery-ui/jquery-ui.min.js') }}
-						
+		{{ HTML::script('plugins/jquery-ddslick/jquery.ddslick.js') }}				
 	</head>
 <body>
 <!--Start Header-->
@@ -96,16 +96,22 @@
 							<i class="fa fa-indent"></i>
 							<span class="hidden-xs">Productos</span>
 						</a>
-						<ul class="dropdown-menu">						
+						<ul class="dropdown-menu">
 							<li>
-								<a class="ajax-link" href="producttypes/all">Categorias General</a>
+								<a class="ajax-link" href="images/all">Imágenes</a>
+							</li>					
+							<li>
+								<a class="ajax-link" href="producttypes/all">Categorías</a>
 							</li>
 							<li>
-								<a class="ajax-link" href="producttypes/cities">Categorias x Ciudad</a>
-							</li>	
+								<a class="ajax-link" href="producttypesbycity/cities">Categorías x Ciudad</a>
+							</li>		
 							<li>
 								<a class="ajax-link" href="products/all">Artículos</a>
-							</li>						
+							</li>	
+							<li>
+								<a class="ajax-link" href="productsbycity/cities">Artículos x Ciudad</a>
+							</li>					
 						</ul>
 					</li>
 				@endif

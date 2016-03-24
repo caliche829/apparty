@@ -3,7 +3,7 @@
 	<div id="breadcrumb" class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a class="ajax-link" href="/">Inicio</a></li>
-			<li><a class="ajax-link" href="#">Crear Producto</a></li>			
+			<li><a class="ajax-link" href="#">Editar categoría x ciudad</a></li>			
 		</ol>
 	</div>
 </div>
@@ -13,7 +13,7 @@
 			<div class="box-header">
 				<div class="box-name">
 					<i class="fa fa-search"></i>
-					<span>Registro de Datos</span>
+					<span>Edición de Datos</span>
 				</div>
 				<div class="box-icons">
 					
@@ -25,10 +25,9 @@
 				<div class="no-move"></div>
 			</div>
 			<div class="box-content">
-				<h4 class="page-header">Nuevo producto</h4>				
-			    <div id="errors_div"></div>		
-													
+				<h4 class="page-header">Editar categoría x ciudad</h4>
 				<div class="form-group well well-lg" style="margin: 10px 20px;">
+					<div id="errors_div"></div>
 					<div class="row">
 						<div class="col-sm-6">	
 							<div class="col-sm-10">
@@ -37,7 +36,7 @@
 							    <select id="icon" name="icon">
 									@foreach($imgs as $img)
 										<option value="{{$img->id}}" data-imagesrc="{{$img->img_url}}">{{$img->description}}</option>
-								    @endforeach									    
+								    @endforeach
 								</select>
 						    </div>
 						</div>
@@ -47,47 +46,35 @@
 								    <div id="bootstrapped-fine-uploader"></div>
 							    </div>
 							</div>
-							<input type="hidden" name="id" id="id" value="" />
-							{{ Form::hidden('type', 'products') }}
+							<input type="hidden" name="id" id="id" value="{{$categoryByCity->category->id}}" />
 						{{ Form::close() }}
 					</div>
 					<br>
-					{{ Form::open(array('action' => 'ProductController@postCreateProduct', 'class'=>'form-horizontal', 'id' => 'submit')) }}
+					{{ Form::open(array('action' => 'ProductTypeByCityController@postEditProductType', 'class'=>'form-horizontal', 'id' => 'submit', 'files' => true)) }}
 						<input type="hidden" name="hidCflag" id="hidCflag" value="{{$imageId}}" />
+						<input type="hidden" name="cityId" id="cityId" value="{{$city->id}}" />
+						{{ Form::hidden('idCity', $city->id) }}
 						<div class="row">
 							<div class="col-sm-6">	
 							    <label class="col-sm-2 control-label">Categoría:</label>
 								<div class="col-sm-10">
-								    {{Form::select('productType', $categories, $categoryId, array('class'=>'form-control', 'data-toggle'=>'tooltip', 'data-placement'=>'bottom', 'title'=>'Categoría', 'id'=>'productType'));}}
+									{{Form::select('category', $categories, $categoryId, array('class'=>'form-control', 'data-toggle'=>'tooltip', 'data-placement'=>'bottom', 'title'=>'Categoría', 'id'=>'category'));}}
+							    </div>
+							</div>
+							<div class="col-sm-6">	
+							    <label class="col-sm-2 control-label">Ciudad:</label>
+							    <label class="col-sm-2 control-label">{{$city->name}}</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">	
+							    <label class="col-sm-2 control-label">Activa:</label>
+							    <div class="col-sm-2">
+									{{ Form::checkbox('active', true, $categoryByCity->active, array('placeholder'=>'Indica si la categoría esta activa para esta ciudad...', 'class'=>'form-control', 'data-toggle'=>'tooltip', 'data-placement'=>'bottom', 'title'=>'Indica si la categoría esta activa para esta ciudad')); }}    	
 							    </div>
 							</div>
 						</div>
 						<br>
-						<div class="row">
-							<div class="col-sm-6">	
-							    <label class="col-sm-2 control-label">Nombre:</label>
-								<div class="col-sm-10">
-								    {{ Form::text('name', null, array(
-								    						'placeholder'=>'Nombre...', 
-							    							'class'=>'form-control', 
-							    							'data-toggle'=>'tooltip', 
-							    							'data-placement'=>'bottom', 
-							    							'title'=>'Nombre')); }}
-							    </div>
-							</div>
-							<div class="col-sm-6">	
-							    <label class="col-sm-2 control-label">Descripción:</label>
-								<div class="col-sm-10">
-								    {{ Form::text('description', null, array(
-								    						'placeholder'=>'Descripción...', 
-							    							'class'=>'form-control', 	
-							    							'data-toggle'=>'tooltip', 
-							    							'data-placement'=>'bottom', 
-							    							'title'=>'Descripción')); }}
-							    </div>
-							</div>
-						</div>
-						<br>						
 					    <div>
 					    	<div class="text-center">
 						   		{{ Form::submit('Guardar', array('class'=>'btn btn-primary'))}}
@@ -142,7 +129,7 @@ $(document).ready(function() {
  			$('#hidCflag').val(data.selectedData.value);
 	    }
 	});
-
+	
 	if(imageId > 0)
 	{
 		var index = $('#icon li:has(input[value="' + imageId +'"])').index();
@@ -153,11 +140,12 @@ $(document).ready(function() {
 		$('#icon').ddslick('select', {index: index });
 	}
 
-	$('#productType').on('change', function() {
-    	var categoryId = $('#productType').val();
+	$('#category').on('change', function() {
+    	var categoryId = $('#category').val();
     	var imageId = $('#hidCflag').val();
+    	var cityId = $('#cityId').val();
 
-		LoadAjaxContent('products/form/'+categoryId+'/'+imageId);
+		LoadAjaxContent('producttypesbycity/edit-form/'+categoryId+'/'+imageId+'/'+cityId);
     });
 
 	// Captura evento submit del formulario
@@ -232,7 +220,7 @@ $(document).ready(function() {
 				var _URL = window.URL || window.webkitURL;
 				var img = new Image();
 		        img.onload = function () {
-	            	var index = $('#icon li:has(input[value="1"])').index();
+	            	index = $('#icon li:has(input[value="1"])').index();
 	            	$('#icon').ddslick('select', {index: index });
 
 	            	imageCount++;
@@ -267,7 +255,7 @@ function saveCategory(inFormId){
 			if (successVal == 1)
 			{
 				if (imageCount > 0) {
-					$('#id').val(responseData.product);
+					$('#id').val(responseData.category);
 					$('#qq-form').submit();	
 				}else{
 					LoadAjaxContent(responseData.url);

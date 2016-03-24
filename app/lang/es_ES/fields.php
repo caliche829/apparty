@@ -22,12 +22,16 @@ return array(
 
 	'zones' => 'Zona empresa',
 
-	'description' => 'Descripcion',
+	'description' => 'Descripción',
 
 	'dimension' => 'Dimension',
 
 	'factor' => 'Factor',
 
-	'question' => 'Pregunta'
+	'question' => 'Pregunta',
+
+	'name' => 'Nombre',
+
+	'product_type_id' => 'Categoría'
 	
 );

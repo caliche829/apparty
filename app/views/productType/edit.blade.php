@@ -3,7 +3,7 @@
 	<div id="breadcrumb" class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a class="ajax-link" href="/">Inicio</a></li>
-			<li><a class="ajax-link" href="#">Editar categoria</a></li>			
+			<li><a class="ajax-link" href="#">Editar categoría</a></li>			
 		</ol>
 	</div>
 </div>
@@ -25,28 +25,28 @@
 				<div class="no-move"></div>
 			</div>
 			<div class="box-content">
-				<h4 class="page-header">Editar categoria</h4>
+				<h4 class="page-header">Editar categoría</h4>
 							    
-				{{ Form::open(array('action' => 'ProductTypeController@postEditCategory', 'class'=>'form-horizontal', 'id' => 'submit')) }}				
+				{{ Form::open(array('action' => 'ProductTypeController@postEditCategory', 'class'=>'form-horizontal', 'id' => 'submit')) }}
+
+					<div id="errors_div"></div>
 					
 					{{ Form::hidden('id', $category->id) }}
 													
 					<div class="form-group well well-lg" style="margin: 10px 20px;">
 	
 						<div class="col-sm-8">	
-						    <label class="col-sm-4 control-label">Categoria</label>
+						    <label class="col-sm-4 control-label">Categoría:</label>
 							<div class="col-sm-8">
 							    {{ Form::text('category', $category->description, array(
 							    						'placeholder'=>'Nombre...', 
 						    							'class'=>'form-control', 					    							
 						    							'data-toggle'=>'tooltip', 
 						    							'data-placement'=>'bottom', 
-						    							'title'=>'Nombre categoria')); }}
+						    							'title'=>'Nombre categoría')); }}
 						    </div>
 						</div>
-					</div>
-
-					<div id="errors_div"></div>
+					</div>					
 					<br>
 					<div class="text-center">
 				   		{{ Form::submit('Guardar', array('class'=>'btn btn-primary'))}}

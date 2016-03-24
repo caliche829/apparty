@@ -27,7 +27,7 @@
 			<div class="box-content">
 
 				@if (Authority::can('create', 'Product'))
-					<a class="btn btn-primary" href="#" onclick="LoadAjaxContent('products/form')">Crear producto</a>
+					<a class="btn btn-primary" href="#" onclick="LoadAjaxContent('products/form/-1/-1')">Crear producto</a>
 				@endif
 
 				<div style="padding: 10px 0; border-top: 2px solid grey;">
@@ -36,7 +36,7 @@
 							<tr>
 								<th>Foto</th>										
 								<th>Producto</th>
-								<th>Categoria</th>							
+								<th>Categoría</th>							
 							</tr>
 						</thead>
 						<tbody>
@@ -45,13 +45,15 @@
 								@foreach($products as $product)
 									<tr>
 										<td>
-											<img src="{{ $product->photo }}" class="center" style="width: 60px; height: auto;">
+											@if ($product->image)
+												<img src="{{ $product->image->img_url }}" class="center" style="width: 60px; height: auto;">
+											@endif
 										</td>
 										<td>
 											{{ 												
 											 	HTML::link('#', 
 											 	$product->name, 
-											 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("products/edit-form/'.$product->id.'"); return false;'), 
+											 	$attributes = array('class'=>'ajax-link', 'onclick' => 'LoadAjaxContent("products/edit-form/'.$product->id.'/-1/-1"); return false;'), 
 											 	$secure = null); 
 											 }}
 										</td>
@@ -63,7 +65,8 @@
 							@else
 								<tr>
 									<td>-</td>
-									<td>-</td>								
+									<td>-</td>
+									<td>-</td>
 								</tr>							
 							@endif
 
