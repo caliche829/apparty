@@ -25,7 +25,7 @@
 				<div class="no-move"></div>
 			</div>
 			<div class="box-content">
-				<h4 class="page-header">Editar categoría x ciudad</h4>
+				<h4 class="page-header">Editar articulo x ciudad</h4>
 				<div class="form-group well well-lg" style="margin: 10px 20px;">
 					<div id="errors_div"></div>
 					{{ Form::open(array('action' => 'ProductByCityController@postEditProduct', 'class'=>'form-horizontal', 'id' => 'submit', 'files' => true)) }}				
