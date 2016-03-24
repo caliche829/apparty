@@ -10,18 +10,20 @@ class Product extends Eloquent {
 	protected $table = 'products';
 			
 	// DEFINE RELATIONSHIPS --------------------------------------------------
-	// product belongs to one productType
-	public function productType() {
-		return $this->belongsTo('ProductType');
-	}
-
-	public static function validate($input, $type) 
+	public static function validate($input, $type, $id) 
     {
     	$rules = array();
     	if ($type == 'create') 
     	{
+    		$strRule = 'Required|Between:3,50|unique:products,name';
+
+    		if($id)
+    		{
+				$strRule = 'Required|Between:3,50|unique:products,name,'.$id.',id';
+    		}
+
 			$rules = array(					
-				'name' => 'Required|Between:3,50',
+				'name' => $strRule,
 				'description' => 'Required|Between:3,50'
 			);
 		}
@@ -30,4 +32,38 @@ class Product extends Eloquent {
 		
 		return $v;
 	}
+
+	// product belongs to one productType
+	public function productType() {
+		return $this->belongsTo('ProductType');
+	}
+
+	public function image(){
+    	return $this->belongsTo('Image', 'img_id', 'id');
+    }
+
+    // product belongs to one productType
+	public function productTypeimage() {
+		return $this->belongsTo('ProductType')
+					->join('image_category as img', 'img_id', '=', 'img.id')
+	                //->select('product_types.id', 'product_types.description', 'img_url', 'prodtypes_cities.active', 'prodtypes_cities.img_id')
+	                ->orderBy('product_types.description');;
+	}
+
+	public function scopeWhereNotRelatedToCity($query, $city_id)
+    {
+        $existProductsQuery = DB::table('products_cities')
+            ->where('city_id', '=', $city_id)
+            ->select('product_id')
+            ->get();
+
+        $existProducts = array();
+        foreach($existProductsQuery as $queryLevel)
+        {
+            $existProducts[] = $queryLevel->product_id;
+        }
+
+        
+        $query->whereNotIn('id', $existProducts);
+    }
 }

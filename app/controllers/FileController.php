@@ -17,24 +17,26 @@ class FileController extends Controller
         if (Input::hasFile('qqfile'))
         {
             $type = Input::get('type');
+            if ($type == 'categ') 
+            {
+                $type = 'categories';
+            }
             $id = Input::get('id');
+            $cityId = Input::get('idCity');
             $file = Input::file("qqfile");
             $url = '';
             
-            try {
-                
+            try 
+            {
+                $img = new Image;                
+                $img->type = $type;
+                $img->save();
+
+                //Crea el nombre del archivo random
+                $filename = $type.'/'.$img->id.'.png';                
+
                 //Instanciamos obj S3
-                $s3 = AWS::get('s3');
-
-                $filename = str_replace(' ', '', microtime());
-                $filename = str_replace('.', '', $filename);
-
-                if ($type == 'product') {
-                    
-                    $filename = 'products/'.$id.'_'.$filename.'.png';
-                    $url = 'products/all';
-                }
-
+                $s3 = AWS::get('s3');                
                 //Guarda imagen en aws S3
                 $s3->putObject(array(
                     'Bucket'     => 'apparty',
@@ -43,24 +45,40 @@ class FileController extends Controller
                     'Body'       => fopen($file, 'rb'),
                 ));
 
-                $deleteFile = '';
+                $urlFile = $s3->getObjectUrl('apparty', $filename);
+         
+                //Guardo url de la foto
+                $img->img_url = $urlFile;
+                $img->save();            
 
-                //Guardo la url de la foto en la categoria
-                if ($type == 'product') {
-
+                if ($type == 'products') 
+                {
                     $product = Product::find($id);
-
-                    $deleteFile = $product->photo;
-
-                    $product->photo = $s3->getObjectUrl('apparty', $filename);
+                    $product->img_id = $img->id;
                     $product->save();
-                }
 
-                //Borramos la imagen previa
-                $s3->deleteObject(array(
-                    'Bucket'     => 'apparty',
-                    'Key'        => $deleteFile
-                ));
+                    $img->description = $product->name;
+                    $img->product_type_id = $product->product_type_id;
+                    $img->save();
+
+                    $url = 'products/all';
+                }
+                else
+                {
+                    if ($type == 'categories') 
+                    {
+                        $columns = array('product_type_id' => $id, 'city_id' => $cityId);
+                        $category = ProductTypeByCity::where($columns)->with('category')->with('city')->with('image')->first();
+                        $category->img_id = $img->id;
+                        $category->save();
+
+                        $img->description = $category->category->description;
+                        $img->product_type_id = $category->product_type_id;
+                        $img->save();
+
+                        $url = 'producttypesbycity/city/'.$category->city_id;
+                    }
+                }
          
                 //Respuesta
                 $response['url'] = $url;
@@ -68,7 +86,12 @@ class FileController extends Controller
                 return json_encode($response);
                             
             } catch (Exception $e) {
-                    
+                if ($file)
+                {
+                    //Borra la foto de s3
+                    $s3 = AWS::get('s3');
+                    $s3->deleteMatchingObjects('apparty', $filename);
+                }
                 $response['success'] = false;
                 $response['errors'] = array('No se pudieron guardar los cambios');
                 Log::error($e);

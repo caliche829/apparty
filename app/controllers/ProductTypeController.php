@@ -16,7 +16,7 @@ class ProductTypeController extends Controller
     }
 
     /**
-     * Obtiene todas las categorias
+     * Obtiene todas las categorías
      */
     public function getAll()
     {
@@ -26,27 +26,7 @@ class ProductTypeController extends Controller
     }
 
     /**
-     * Obtiene view con las ciudades para seleccionar
-     */
-    public function getCities()
-    {
-        $cities = City::lists('name','id');
-        
-        return View::make('productType.cityIndex') -> with('cities', $cities);
-    }
-
-    /**
-     * Obtiene todas las categorias de una ciudad
-     */
-    public function getCityAll($id)
-    {
-        $city = City::where('id', $id)->with('categories')->first();
-        
-        return View::make('productType.cityCategories') -> with('city', $city);
-    }
-
-    /**
-     * Crea una nueva categoria
+     * Crea una nueva categoría
      */
     public function postCreateProductType()
     {
@@ -59,7 +39,7 @@ class ProductTypeController extends Controller
         $response = array('success' => true);
         
         //Valida el input
-        $v = ProductType::validate($input, 'create');
+        $v = ProductType::validate($input, 'create', false);
         
         //En caso de fallo retorna msj de error
         if($v->fails())
@@ -71,14 +51,14 @@ class ProductTypeController extends Controller
         
         try {
 
-            //Crea la nueva categoria
+            //Crea la nueva categoría
             $category = new ProductType;
             $category->description = Input::get('category');
             $category->save();
             
             //Respuesta
             $response['url'] = 'producttypes/all';
-            $response['msg'] = 'Categoria creada con exito';
+            $response['msg'] = 'Categoría creada con exito';
             return json_encode($response);
                         
         } catch (Exception $e) {
@@ -92,7 +72,7 @@ class ProductTypeController extends Controller
     }
 
     /**
-     * Devuelve el formulario con los datos de la categoria
+     * Devuelve el formulario con los datos de la categoría
      */
     public function getEditForm($id)
     {
@@ -102,7 +82,7 @@ class ProductTypeController extends Controller
     }
 
     /**
-     * Edita una categoria
+     * Edita una categoría
      */
     public function postEditCategory()
     {
@@ -110,11 +90,13 @@ class ProductTypeController extends Controller
             
         //Obtengo datos para validacion        
         $input['description'] = Input::get('category');
-                    
+
         $response = array('success' => true);
         
+        $id = Input::get('id');        
+        
         //Valida el input
-        $v = ProductType::validate($input, 'create');
+        $v = ProductType::validate($input, 'create', $id);
         
         //En caso de fallo retorna msj de error
         if($v->fails())
@@ -126,14 +108,14 @@ class ProductTypeController extends Controller
         
         try {
 
-            //Obtiene la categoria
-            $category = ProductType::find(Input::get('id'));
+            //Obtiene la categoría
+            $category = ProductType::find($id);
             $category->description = Input::get('category');
             $category->save();
                      
             //Respuesta
             $response['url'] = 'producttypes/all';
-            $response['msg'] = 'Categoria editada con exito';
+            $response['msg'] = 'Categoría editada con exito';
             return json_encode($response);
                         
         } catch (Exception $e) {

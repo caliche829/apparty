@@ -7,14 +7,27 @@
  */
 class ProductController extends Controller
 {
+    public function defaultImgId()
+    {
+        return 1;
+    }
+
     /**
      * Obtiene el form
      */
-    public function getForm()
+    public function getForm($categoryId, $imgId)
     {
-        $categories = ProductType::lists('description','id');
+        $categories = ProductType::orderBy('description', 'ASC')->get();
 
-        return View::make('products.create')->with('categories', $categories);
+        if(!($categoryId > 0))
+        {
+            $category = $categories->first();
+            $categoryId = $category->id;
+        }
+
+        $imgs = Image::whereNull('type')->orWhere('product_type_id', $categoryId)->orderBy('description')->get();
+
+        return View::make('products.create')->with(array('categories' => $categories->lists('description','id'), 'imgs' => $imgs, 'categoryId' => $categoryId, 'imageId'=>$imgId));
     }
 
     /**
@@ -22,7 +35,9 @@ class ProductController extends Controller
      */
     public function getAll()
     {
-        $products = Product::with('productType')->get();
+        $products = Product::with('productType')->with('image')->get();
+
+        //Log::info($products);
         
         return View::make('products.all') -> with('products', $products);
     }
@@ -34,89 +49,73 @@ class ProductController extends Controller
     {
         $input = array();
 
-        if (Input::hasFile('qqfile'))
+        $imgId = Input::get('hidCflag');
+        $input['description'] = Input::get('description');
+        $input['name'] = Input::get('name');
+
+        $response = array('success' => true);
+        
+        //Valida el input
+        $v = Product::validate($input, 'create', false);
+        
+        //En caso de fallo retorna msj de error
+        if($v->fails())
         {
-            $file = Input::file("qqfile");
-                        
-            $input['description'] = Input::get('description');
-            $input['name'] = Input::get('name');
-
-            $response = array('success' => true);
-            
-            //Valida el input
-            $v = Product::validate($input, 'create');
-            
-            //En caso de fallo retorna msj de error
-            if($v->fails())
-            {
-                $response['success'] = false;
-                $response['errors'] = $v->errors()->all();
-                return json_encode($response);
-            }
-            
-            try {
-
-                //Crea la nueva categoria
-                $product = new Product;
-                $product->name = Input::get('name');
-                $product->description = Input::get('description');
-                $product->product_type_id = Input::get('productType');
-                $product->save();
-
-                //Crea el nombre del archivo random
-                $filename = str_replace(' ', '', microtime());
-                $filename = str_replace('.', '', $filename);
-                $filename = 'products/'.$product->id.'_'.$filename.'.png';
-
-                //Guarda imagen en aws S3
-                $s3 = AWS::get('s3');
-                $s3->putObject(array(
-                    'Bucket'     => 'apparty',
-                    'Key'        => $filename,
-                    'ACL'        => 'public-read',
-                    'Body'       => fopen($file, 'rb'),
-                ));
-
-                $urlFile = $s3->getObjectUrl('apparty', $filename);
-         
-                //Guardo url de la foto
-                $product->photo = $urlFile;
-                $product->save();
-
-                //Respuesta
-                $response['url'] = 'products/all';
-                $response['msg'] = 'Producto creado con exito';
-                return json_encode($response);
-                            
-            } catch (Exception $e) {
-                    
-                Log::error($e);
-
-                //Borra la foto de s3
-                $s3 = AWS::get('s3');
-                $s3->deleteMatchingObjects('apparty', $filename);
-
-                $response['success'] = false;
-                $response['errors'] = array('No se pudieron guardar los cambios');
-                
-                return json_encode($response);
-            }
-        }else{
             $response['success'] = false;
-            $response['errors'] = array('Debe subir una foto en formato PNG');
+            $response['errors'] = $v->errors()->all();
             return json_encode($response);
-        }   
+        }
+        
+        try {
+
+            //Crea la nueva categoría
+            $product = new Product;
+            $product->name = Input::get('name');
+            $product->description = Input::get('description');
+            $product->product_type_id = Input::get('productType');
+            $product->img_id = $imgId;
+            $product->save();
+
+            //Respuesta
+            $response['product'] = $product->id;
+            $response['url'] = 'products/all';
+            $response['msg'] = 'Producto creado con exito';
+            return json_encode($response);
+                        
+        } catch (Exception $e) {
+                
+            Log::error($e);
+
+            $response['success'] = false;
+            $response['errors'] = array('No se pudieron guardar los cambios');
+            
+            return json_encode($response);
+        }
+          
     }
 
     /**
      * Devuelve el formulario con los datos del producto
      */
-    public function getEditForm($id)
+    public function getEditForm($id, $categoryId, $imgId)
     {
         $product = Product::find($id);
-        $categories = ProductType::lists('description','id');
-        
-        return View::make('products.edit') -> with(array('product'=>$product, 'categories'=>$categories));
+
+        $categories = ProductType::orderBy('description', 'ASC')->lists('description','id');
+
+        if(!($categoryId > 0))
+        {
+            $categoryId = $product->product_type_id;
+        }
+
+        if(!($imgId > 0))
+        {
+            $imgId = $product->img_id;
+        }
+
+        $imgs = Image::whereNull('type')->orWhere('product_type_id', $categoryId)->orderBy('description')->get();
+
+        return View::make('products.edit')->with(array('product'=>$product, 'categories' => $categories, 'imgs' => $imgs, 'categoryId' => $categoryId, 'imageId'=>$imgId));
     }
 
     /**
@@ -126,14 +125,17 @@ class ProductController extends Controller
     {
         $input = array();
             
-        //Obtengo datos para validacion        
+        //Obtengo datos para validacion   
+        $imgId = Input::get('hidCflag');
         $input['name'] = Input::get('name');
         $input['description'] = Input::get('description');
                     
         $response = array('success' => true);
         
-        //Valida el input
-        $v = Product::validate($input, 'create');
+        $id = Input::get('id');
+
+        //Valida el input        
+        $v = Product::validate($input, 'create', $id);
         
         //En caso de fallo retorna msj de error
         if($v->fails())
@@ -146,9 +148,10 @@ class ProductController extends Controller
         try {
 
             //Obtiene el producto
-            $product = Product::find(Input::get('id'));
+            $product = Product::find($id);
             $product->name = Input::get('name');
             $product->description = Input::get('description');
+            $product->img_id = $imgId;
             $product->save();
                      
             //Respuesta
@@ -162,7 +165,6 @@ class ProductController extends Controller
             $response['errors'] = array('No se pudieron guardar los cambios');
             Log::error($e);
             return json_encode($response);
-        }
-         
+        }         
     }
 }
