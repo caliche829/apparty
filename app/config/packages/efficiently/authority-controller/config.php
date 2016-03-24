@@ -7,8 +7,6 @@ return [
         // Action aliases. For example:
         //
         // $authority->addAlias('moderate', ['read', 'update', 'delete']);
-        $authority->addAlias('readUpdate', array('read', 'update'));
-        $authority->addAlias('readInsertUpdate', array('read', 'create', 'update'));
         //
         // See the wiki of AuthorityController for details:
         // https://github.com/efficiently/authority-controller/wiki/Action-aliases
@@ -17,19 +15,18 @@ return [
         //
         $user = Auth::guest() ? new User : $authority->getCurrentUser();
         
-        if ($user->hasRole('Recepcionista')) {
-            
-            $authority->allow('readInsertUpdate', 'Appointment');
-            $authority->allow('readInsertUpdate', 'User');
-                        
-        } elseif ($user->hasRole('Administrador')) {
+        $authority->addAlias('readUpdate', array('read', 'update'));
+        $authority->addAlias('readInsertUpdate', array('read', 'create', 'update'));
+
+        if ($user->hasRole('Administrador')) {
             
             $authority->allow('manage', 'all');
 
-        } elseif ($user->hasRole('Contratista')) {
-
-            $authority->allow('readUpdate', 'Appointment');
-        }
+        } elseif ($user->hasRole('Administrador ciudad')) {
+            
+            $authority->allow('readInsertUpdate', 'Product');
+            $authority->allow('readInsertUpdate', 'Order');
+        } 
         //
         // The first argument to `allow` is the action you are giving the user
         // permission to do.

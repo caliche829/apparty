@@ -103,3 +103,10 @@ Route::filter('after', function($response)
 	$response->header("Pragma", "no-cache");
 	$response->header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 });
+
+Route::filter('checkUserIsActive', function()
+{
+	if (Confide::user() && !Confide::user()->active) {
+        return View::make(Config::get('confide::login_form'));
+    }
+});
