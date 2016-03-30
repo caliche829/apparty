@@ -62,7 +62,7 @@ class UsersController extends Controller
      */
     public function login()
     {
-        if (Confide::user()) {
+        if (Confide::user() && Confide::user()->active) {
             return Redirect::to('/');
         } else {
             return View::make(Config::get('confide::login_form'));
@@ -80,7 +80,13 @@ class UsersController extends Controller
         $input = Input::all();
 
         if ($repo->login($input)) {
-            return Redirect::intended('/');
+            if(Confide::user()->active == '1'){
+                return Redirect::intended('/');
+            }else{
+                return Redirect::action('UsersController@login')
+                        ->withInput(Input::except('password'))
+                        ->with('error', 'Usuario inactivo, comuniquese con el administrador del sistema.');
+            }
         } else {
             if ($repo->isThrottled($input)) {
                 $err_msg = Lang::get('confide::confide.alerts.too_many_attempts');
@@ -195,5 +201,79 @@ class UsersController extends Controller
         Confide::logout();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Get all the users 
+     *
+     * @return  Illuminate\Http\Response
+     */
+    public function getAll()
+    {
+        $users = User::with('roles')->get();
+        
+        //Log::info($business);
+
+        return View::make('user.all') -> with('users', $users);
+    }
+
+    /**
+     * Get edit form to update user information
+     *
+     * @return  Illuminate\Http\Response
+     */
+    public function getEdit($id)
+    {
+        $user = User::find($id);
+        $role = $user->roles()->first();
+        $roles = Role::lists('name','id');
+        
+        return View::make('user.edit') -> with(array('user'=>$user, 'roleId'=>$role->id, 'roles'=>$roles));
+    }
+
+    /**
+     * Update user information
+     *
+     * @return  Illuminate\Http\Response
+     */
+    public function postEditUser()
+    {
+        $user = User::find(Input::get('id'));
+
+        if($user){
+
+            $input = Input::all();
+            $user->username = array_get($input, 'username');
+            $user->email    = array_get($input, 'email');
+            $user->fullname = array_get($input, 'fullname');
+            $user->phone = array_get($input, 'phone');
+            $user->active = array_get($input, 'active') ? 1 : 0;
+
+            if(strlen(array_get($input, 'password')) > 0){
+                $user->password = array_get($input, 'password');
+                $user->password_confirmation = array_get($input, 'password_confirmation');
+            }
+
+            $repo = App::make('UserRepository');
+            $result = $repo->save($user);
+
+            if($result){
+                //sync the role
+                $user->roles()->sync(array(Input::get('rol')));
+
+                //Respuesta
+                $response['success'] = true;
+                $response['url'] = 'users/all';
+                $response['msg'] = 'Usuario actualizado';
+                return json_encode($response);
+
+            } else {
+                $error = $user->errors()->all(':message');
+
+                $response['success'] = false;
+                $response['errors'] = $error;
+                return json_encode($response);
+            }
+        }
     }
 }

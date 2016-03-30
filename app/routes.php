@@ -17,9 +17,18 @@ Route::post('allCities', 'CityController@allCities');
 // Obtiene la informacion inicial del app
 Route::post('getFirstInfo', 'HomeController@getFirstInfo');
 
+// Confide routes
+Route::get('users/login', 'UsersController@login');
+Route::post('users/login', 'UsersController@doLogin');
+Route::get('users/confirm/{code}', 'UsersController@confirm');
+Route::get('users/forgot_password', 'UsersController@forgotPassword');
+Route::post('users/forgot_password', 'UsersController@doForgotPassword');
+Route::get('users/reset_password/{token}', 'UsersController@resetPassword');
+Route::post('users/reset_password', 'UsersController@doResetPassword');
+Route::get('users/logout', 'UsersController@logout');
 
 // Nos indica que las rutas que están dentro de él sólo serán mostradas si antes el usuario se ha autenticado.
-Route::group(array('before' => 'auth'), function()
+Route::group(array('before' => 'auth', 'before' => 'checkUserIsActive'), function()
 {
 
 	//Welcome view inside dashboard
@@ -97,18 +106,15 @@ Route::group(array('before' => 'auth'), function()
 	//////////////////////////////////////
 	Route::controller('images', 'ImageController');
 
+	//////////////////////////////////////
+	////
+	////	USUARIOS
+	////
+	//////////////////////////////////////
+	Route::controller('users', 'UsersController');
+
 	// Confide routes
 	Route::get('users/create', 'UsersController@create');
 	Route::post('users', 'UsersController@store');
 	
 });
-
-// Confide routes
-Route::get('users/login', 'UsersController@login');
-Route::post('users/login', 'UsersController@doLogin');
-Route::get('users/confirm/{code}', 'UsersController@confirm');
-Route::get('users/forgot_password', 'UsersController@forgotPassword');
-Route::post('users/forgot_password', 'UsersController@doForgotPassword');
-Route::get('users/reset_password/{token}', 'UsersController@resetPassword');
-Route::post('users/reset_password', 'UsersController@doResetPassword');
-Route::get('users/logout', 'UsersController@logout');

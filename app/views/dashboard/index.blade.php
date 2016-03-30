@@ -90,7 +90,7 @@
 	<div class="row">
 		<div id="sidebar-left" class="col-xs-2 col-sm-2">
 			<ul class="nav main-menu">
-				@if (Confide::user()->hasRole('Administrador'))
+				@if (Authority::can('read', 'Product'))
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-indent"></i>
@@ -140,7 +140,20 @@
 							<li><a class="ajax-link" href="orders/orders-pending-form">Pedidos pendientes</a></li>
 						</ul>
 					</li>		
-				@endif					
+				@endif
+				@if (Authority::can('read', 'User'))
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-users"></i>
+							<span class="hidden-xs">Usuarios</span>
+						</a>
+						<ul class="dropdown-menu">						
+							<li>
+								<a class="ajax-link" href="users/all">Consultar</a>
+							</li>
+						</ul>
+					</li>
+				@endif						
 			</ul>
 		</div>
 		<!--Start Content-->
